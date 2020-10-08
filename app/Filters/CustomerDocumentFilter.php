@@ -1,23 +1,26 @@
 <?php
 
 namespace App\Filters;
-use App\Consumer\PersonPersistence;
+use App\Consumer\RefinedSalesPersistanse;
+use App\Consumer\RejectSalesPersistanse;
 
 class CustomerDocumentFilter {
-    public function removeAmountZero($people = [])
+    public function customerDocument($sales = [])
     {
-        $arrayTypePerson = [];
-        foreach ($people as $key => $value) {
-            if (strlen($value->document) === 8) {
-                $value->type_person = 'NATURAL';
-                array_push($arrayTypePerson, $value);
-            } elseif (strlen($value->document) === 11) {
-                $value->type_person = 'JURIDICA';
-                array_push($arrayTypePerson, $value);
+        foreach ($sales->refined as $key => $value) {
+            if (str_split($value->customer_document, 2) === 10) {
+                $value->type_person = 'NATURAL CON NEGOCIO';
+            } elseif (str_split($value->customer_document, 2) === 20) {
+                $value->type_person = 'EMPRESA';
             }
         }
-        $createPerson = new PersonPersistence();
-        $persistence = $createPerson->sendPersonToDB($arrayTypePerson);
-        return $persistence;
+        $createPerson = new RefinedSalesPersistanse();
+        $persistenceRefined = $createPerson->sendPersonToDB($sales->refined);
+        $createPerson = new RejectSalesPersistanse();
+        $persistenceRejected = $createPerson->sendPersonToDB($sales->rejected);
+        return $response = [
+            'rejected' => $persistenceRejected,
+            'refined' => $persistenceRefined
+        ];
     }
 }

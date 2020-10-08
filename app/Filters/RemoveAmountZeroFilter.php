@@ -4,20 +4,16 @@ namespace App\Filters;
 use App\Filters\CustomerDocumentFilter;
 
 class RemoveAmountZeroFilter {
-    public function removeAmountZero($people = [])
+    public function removeAmountZero($sales = [])
     {
-        $arrayTypePerson = [];
-        foreach ($people as $key => $value) {
-            if (strlen($value->document) === 8) {
-                $value->type_person = 'NATURAL';
-                array_push($arrayTypePerson, $value);
-            } elseif (strlen($value->document) === 11) {
-                $value->type_person = 'JURIDICA';
-                array_push($arrayTypePerson, $value);
+        foreach ($sales->refined as $key => $value) {
+            if ($value->amount < 0) {
+                array_push($sales->rejected, $value);
+                unset($sales->rejected[$key]);
             }
         }
         $CustomerDocument = new CustomerDocumentFilter();
-        $persistence = $CustomerDocument->sendPersonToDB($arrayTypePerson);
+        $persistence = $CustomerDocument->customerDocument($sales);
         return $persistence;
     }
 }

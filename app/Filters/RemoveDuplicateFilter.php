@@ -22,9 +22,8 @@ class RemoveDuplicateFilter {
                 }
             }
         }
-        dd($totalSales);
         $UnsignedClient = new UnsignedClientFilter();
-        $filter = $UnsignedClient->removeUnsigned($personChecked);
+        $filter = $UnsignedClient->removeUnsigned($totalSales);
         
         return $filter;
     }
