@@ -1,0 +1,38 @@
+@startuml
+package Controller {
+  class SaleController {
+    /'receive excel document'/
+  }
+}
+package Producer {
+  class ExcelImport {
+    /'This tranform the excel in a code list'/
+  }
+}
+package Filters {
+  class  RemoveDuplicateFilter{
+  }
+  class UnsignedClientFilter {
+  }
+  class RemoveAmountZeroFilter {
+  }
+  class CustomerDocumentFilter {
+  }
+}
+package Consumer {
+  class RefinedSalesPersistanse {
+  
+  }
+  class RejectSalesPersistanse {
+  
+  }
+}
+
+SaleController -> ExcelImport
+ExcelImport --> RemoveDuplicateFilter
+RemoveDuplicateFilter --> UnsignedClientFilter
+UnsignedClientFilter --> RemoveAmountZeroFilter
+RemoveAmountZeroFilter --> CustomerDocumentFilter
+CustomerDocumentFilter --> RefinedSalesPersistanse
+CustomerDocumentFilter --> RejectSalesPersistanse
+@enduml

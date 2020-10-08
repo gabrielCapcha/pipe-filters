@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  apiSalesModule:
+      image: webdevops/php-nginx:7.2
+      # restart: always
+      ports:
+        - 8010:80
+      volumes:
+        - C:\Users\Gabriel\Desktop\Tumisoft\apiSalesModule\source:/app:rw
+      environment:
+        - WEB_DOCUMENT_ROOT=/app/public
