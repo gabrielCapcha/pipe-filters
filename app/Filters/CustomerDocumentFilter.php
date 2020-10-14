@@ -8,16 +8,17 @@ class CustomerDocumentFilter {
     public function customerDocument($sales = [])
     {
         foreach ($sales->refined as $key => $value) {
-            if (str_split($value->customer_document, 2) === 10) {
+            $firstChar = str_split($value->customer_document, 2);
+            if ($firstChar[0] == 10) {
                 $value->type_person = 'NATURAL CON NEGOCIO';
-            } elseif (str_split($value->customer_document, 2) === 20) {
+            } elseif ($firstChar[0] == 20) {
                 $value->type_person = 'EMPRESA';
             }
         }
-        $createPerson = new RefinedSalesPersistanse();
-        $persistenceRefined = $createPerson->sendPersonToDB($sales->refined);
-        $createPerson = new RejectSalesPersistanse();
-        $persistenceRejected = $createPerson->sendPersonToDB($sales->rejected);
+        $createSale = new RefinedSalesPersistanse();
+        $persistenceRefined = $createSale->sendSalesToDB($sales->refined);
+        $createSale = new RejectSalesPersistanse();
+        $persistenceRejected = $createSale->sendSalesToDB($sales->rejected);
         return $response = [
             'rejected' => $persistenceRejected,
             'refined' => $persistenceRefined

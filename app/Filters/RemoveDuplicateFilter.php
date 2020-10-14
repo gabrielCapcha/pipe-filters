@@ -9,17 +9,13 @@ class RemoveDuplicateFilter {
         $totalSales = new \stdClass();
         $totalSales->rejected = [];
         $totalSales->refined = [];
-        foreach ($sales as $key => $value) {
-            if (count($totalSales->refined) == 0) {
-                array_push($totalSales->refined, $value);
+        $temp_array = array();
+        foreach((array)$sales as $key => $val) {
+            if (!in_array($val->amount, $temp_array)) {
+                array_push($temp_array, $val->amount);
+                array_push($totalSales->refined, $val);
             } else {
-                foreach ($totalSales->refined as $key_ => $value_) {
-                    if ($value->amount == $value_->amount && $value->customer_document == $value_->customer_document) {
-                        array_push($totalSales->rejected, $value);
-                    } else {
-                        array_push($totalSales->refined, $value);
-                    }
-                }
+                array_push($totalSales->rejected, $val);
             }
         }
         $UnsignedClient = new UnsignedClientFilter();

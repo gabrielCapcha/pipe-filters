@@ -9,7 +9,7 @@ class RemoveAmountZeroFilter {
         foreach ($sales->refined as $key => $value) {
             if ($value->amount < 0) {
                 array_push($sales->rejected, $value);
-                unset($sales->rejected[$key]);
+                unset($sales->refined[$key]);
             }
         }
         $CustomerDocument = new CustomerDocumentFilter();
